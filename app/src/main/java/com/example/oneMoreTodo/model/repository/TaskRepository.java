@@ -4,30 +4,46 @@ import com.example.oneMoreTodo.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskRepository  {
+    private List<Task> tasks = new ArrayList<>();
 
-   private List<Task> tasks;
-
-   public TaskRepository() {
+    public TaskRepository() {
        this.tasks = new ArrayList<>();
+        tasks.add(new Task("Купить молочка"));
+        tasks.add(new Task("Купить огурчики"));
+        tasks.add(new Task("Купить рыбку"));
+        tasks.add(new Task("Купить пивка"));
+    }
+
+    public List<Task> getAllTask(){
+       return this.tasks;
    }
 
-   public List<Task> getAllTask(){
-       tasks.add(new Task("купить молочка"));
-       tasks.add(new Task("купить огурчики"));
-       tasks.add(new Task("купить картошечку"));
-       tasks.add(new Task("купить рыбку"));
-       tasks.add(new Task("купить пивка"));
-       tasks.add(new Task("купить памперсы"));
-       tasks.add(new Task("купить носки"));
-       tasks.add(new Task("купить противозачаточные"));
-       return tasks;
-   }
-//
-//    Task createTask(){
-//
-//    }
+    public void createTask(String text){
+        Task task = new Task(text);
+        this.tasks.add(task);
+    }
+
+    private List<Task> filterTasks (Boolean isCompleted){
+        List<Task> filtered = new ArrayList();
+
+        for(Task task : tasks){
+            if(task.isCompleted() == isCompleted ){
+                filtered.add(task);
+            }
+        }
+        return filtered;
+    }
+
+    public List<Task> activeTasks (){
+        return this.filterTasks(false);
+    }
+
+    public List<Task> completedTasks (){
+        return this.filterTasks(true);
+    }
 //
 //    Task updateTask(){
 //

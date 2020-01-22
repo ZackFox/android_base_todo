@@ -7,14 +7,58 @@
     android:background="#eee"
     tools:context=".ui.tasks.TaskListActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/textColor"
+            android:textSize="20sp"
+            android:text="@string/header_title"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_add"
+            app:iconTint="@color/textColor"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/todo_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/bottom_menu"
+        />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="60dp"
+        android:background="@color/colorPrimary"
+        app:menu="@menu/bottom_menu"
+        app:itemTextColor="@color/ic_selector_colors"
+        app:itemIconTint="@color/ic_selector_colors"
+        android:paddingVertical="10dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
