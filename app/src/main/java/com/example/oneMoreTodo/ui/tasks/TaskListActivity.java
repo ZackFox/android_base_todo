@@ -3,60 +3,73 @@ package com.example.oneMoreTodo.ui.tasks;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.oneMoreTodo.R;
 import com.example.oneMoreTodo.model.Task;
 import com.example.oneMoreTodo.model.repository.TaskRepository;
+import com.example.oneMoreTodo.ui.addTask.AddTaskFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class TaskListActivity extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity  {
+
+    private static final String TAG = "TaskListActivity";
 
     private RecyclerView tasksRecycler;
-    private RecyclerView.Adapter tasksAdapter;
+    private TaskListAdapter tasksAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ImageView addTaskBtn;
 
-    TaskRepository taskRepository = new TaskRepository();
-    List<Task> tasks;
+    private TaskRepository taskRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tasks = taskRepository.getAllTask();
-        layoutManager = new LinearLayoutManager(this);
-        tasksAdapter = new TaskListAdapter(tasks);
+        taskRepository = TaskRepository.getInstance();
 
         tasksRecycler = findViewById(R.id.todo_container);
-        tasksRecycler.setLayoutManager(layoutManager);
+
+        tasksAdapter = new TaskListAdapter(taskRepository.getAllTask());
         tasksRecycler.setAdapter(tasksAdapter);
 
-        BottomNavigationView btmNavView = findViewById(R.id.bottom_menu);
-        btmNavView.setOnNavigationItemSelectedListener(
+        layoutManager = new LinearLayoutManager(this);
+        tasksRecycler.setLayoutManager(layoutManager);
+
+        addTaskBtn = findViewById(R.id.add_task_btn);
+
+        BottomNavigationView bottomNavView = findViewById(R.id.bottom_menu);
+        bottomNavView.setOnNavigationItemSelectedListener(
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case (R.id.btn_all): {
-                            //taskRepository.getAllTask();
-                            System.out.println("ALL task list");
+                            tasksAdapter.updateTaskList(taskRepository.getAllTask());
+                            Log.d(TAG, "ItemSelected: ALL");
                             return true;
                         }
                         case (R.id.btn_active): {
-                            System.out.println("ACTIVE task list");
+                            tasksAdapter.updateTaskList(taskRepository.getActiveTasks());
+                            Log.d(TAG, "ItemSelected: ACTIVE");;
                             return true;
                         }
                         case (R.id.btn_completed): {
-                            System.out.println("COMPLETED task list");
+                            tasksAdapter.updateTaskList(taskRepository.getCompletedTasks());
+                            Log.d(TAG, "ItemSelected: COMPLETED");
                             return true;
                         }
                     }
@@ -65,6 +78,4 @@ public class TaskListActivity extends AppCompatActivity {
                 }
             });
     }
-
-
 }

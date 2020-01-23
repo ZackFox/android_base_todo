@@ -43,6 +43,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
 
+    public void updateTaskList (List<Task> list){
+        this.taskList = list;
+        notifyDataSetChanged();
+    }
+
+
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
         private CardView cardView;
