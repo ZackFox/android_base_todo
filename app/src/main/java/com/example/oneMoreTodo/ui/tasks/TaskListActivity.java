@@ -23,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class TaskListActivity extends AppCompatActivity  {
+public class TaskListActivity extends AppCompatActivity {
 
     private static final String TAG = "TaskListActivity";
 
@@ -50,6 +50,17 @@ public class TaskListActivity extends AppCompatActivity  {
         tasksRecycler.setLayoutManager(layoutManager);
 
         addTaskBtn = findViewById(R.id.add_task_btn);
+        addTaskBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClickAddButton: ADD NEW TASK");
+
+                FragmentManager manager = getSupportFragmentManager();
+                AddTaskFragment addTaskDialog = new AddTaskFragment();
+                addTaskDialog.show(manager, "NEWTASK");
+
+            }
+        });
 
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_menu);
         bottomNavView.setOnNavigationItemSelectedListener(
@@ -77,5 +88,10 @@ public class TaskListActivity extends AppCompatActivity  {
                     return false;
                 }
             });
+    }
+
+    public void applyTaskText (String text){
+        taskRepository.createTask(text);
+        tasksAdapter.notifyDataSetChanged();
     }
 }
