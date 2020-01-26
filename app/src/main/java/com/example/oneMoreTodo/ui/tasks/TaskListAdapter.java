@@ -28,11 +28,28 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     class TaskViewHolder extends RecyclerView.ViewHolder {
 
         private CardView cardView;
+        private TextView textView;
 
         public TaskViewHolder(@NonNull CardView view) {
             super(view);
-            cardView = view;
+            this.cardView = view;
+            textView = this.cardView.findViewById(R.id.task_text);
         }
+
+        public void showCardState(boolean isCompleted) {
+            CardView cardView = this.cardView;
+            Resources res = cardView.getContext().getResources();
+            TextView textView = this.textView;
+
+            if(isCompleted){
+                cardView.setCardBackgroundColor(res.getColor(R.color.completed));
+                textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            }else{
+                cardView.setCardBackgroundColor(res.getColor(R.color.active));
+                textView.setPaintFlags(0);
+            }
+        }
+
     }
 
     @NonNull
@@ -49,36 +66,20 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TaskViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final TaskViewHolder holder, final int position) {
         final Task task = taskList.get(position);
-        final CardView cardView =  holder.cardView;
-        TextView textView = cardView.findViewById(R.id.task_text);
-        textView.setText(taskList.get(position).getText());
-        textView.setPaintFlags(0);
-        showCardState(task,cardView);
+        holder.textView.setText(task.getText());
+        holder.showCardState(task.isCompleted());
 
-        cardView.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "isCompleted: " + task.isCompleted());
 
                 task.setCompleted(!task.isCompleted());
-                showCardState(task,cardView);
+                holder.showCardState(task.isCompleted());
             }
         });
-    }
-
-    public void showCardState(Task task,CardView view) {
-        Resources res = view.getContext().getResources();
-        TextView textView = view.findViewById(R.id.task_text);
-
-        if(task.isCompleted()){
-            view.setCardBackgroundColor(res.getColor(R.color.completed));
-            textView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-        }else{
-            view.setCardBackgroundColor(res.getColor(R.color.active));
-            textView.setPaintFlags(0);
-        }
     }
 
     public void updateTaskList (List<Task> list){
