@@ -86,4 +86,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         this.taskList = list;
         notifyDataSetChanged();
     }
+
+    public void deleteItem(int position) {
+        this.taskList.remove(position);
+        notifyDataSetChanged();
+    }
 }

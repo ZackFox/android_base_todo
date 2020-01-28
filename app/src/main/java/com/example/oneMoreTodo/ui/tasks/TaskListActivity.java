@@ -2,27 +2,24 @@ package com.example.oneMoreTodo.ui.tasks;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.oneMoreTodo.R;
 import com.example.oneMoreTodo.model.Task;
 import com.example.oneMoreTodo.model.repository.TaskRepository;
 import com.example.oneMoreTodo.ui.addTask.AddTaskFragment;
+import com.example.oneMoreTodo.utils.TouchHelperCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity {
 
@@ -30,6 +27,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     private RecyclerView tasksRecycler;
     private TaskListAdapter tasksAdapter;
+    private ItemTouchHelper itemTouchHelper;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView addTaskBtn;
 
@@ -42,13 +40,18 @@ public class TaskListActivity extends AppCompatActivity {
 
         taskRepository = TaskRepository.getInstance();
 
+        // set  tasksRecycler
         tasksRecycler = findViewById(R.id.todo_container);
-
         tasksAdapter = new TaskListAdapter(taskRepository.getAllTask());
-        tasksRecycler.setAdapter(tasksAdapter);
-
         layoutManager = new LinearLayoutManager(this);
+
+        tasksRecycler.setAdapter(tasksAdapter);
         tasksRecycler.setLayoutManager(layoutManager);
+
+        // add touch to tasksRecycler
+        itemTouchHelper = new ItemTouchHelper(new TouchHelperCallback(tasksAdapter));
+        itemTouchHelper.attachToRecyclerView(tasksRecycler);
+
 
         addTaskBtn = findViewById(R.id.add_task_btn);
         addTaskBtn.setOnClickListener(new View.OnClickListener() {
